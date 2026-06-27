@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Перевозки без границ — ETS2 серверы 24/7</title>
+<meta name="description" content="Русский проект для Euro Truck Simulator 2. Серверы 24/7, дружное сообщество, моды и конвои.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0f14;
+    --bg2: #13161e;
+    --bg3: #1a1e28;
+    --card: #1e2330;
+    --card2: #232838;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --accent: #e8a020;
+    --accent2: #f0b540;
+    --accent-dim: rgba(232,160,32,0.12);
+    --red: #e05252;
+    --green: #4caf6e;
+    --text: #eef0f5;
+    --text2: #9aa3b8;
+    --text3: #6b7489;
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* logo used in footer only */
+  .logo {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.3rem; font-weight: 700;
+    color: var(--accent); text-decoration: none;
+    letter-spacing: 0.04em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .logo span { color: var(--text); font-weight: 500; }
+
+  /* HERO */
+  .hero {
+    position: relative; overflow: hidden;
+    min-height: 88vh;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    padding: 8rem 2rem 4rem;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://i.imgur.com/Gk1aDMd.jpeg') center center / cover no-repeat;
+  }
+  .hero-road {
+    position: absolute; inset: 0; overflow: hidden;
+    display: none; /* Убирает старую темную дорогу с экрана */
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 760px; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .hero h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(2.8rem, 7vw, 5rem);
+    font-weight: 700; line-height: 1.05;
+    letter-spacing: 0.02em;
+    margin-bottom: 1.25rem;
+    margin-top: 0;
+  }
+  .hero h1 em { color: var(--accent); font-style: normal; }
+  .hero p {
+    font-size: 1.1rem; color: var(--text2);
+    max-width: 520px; margin: 0 auto 2.5rem;
+  }
+  .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--accent); color: #0d0f14;
+    font-weight: 700; font-size: 0.95rem;
+    padding: 0.8rem 2rem; border-radius: var(--radius);
+    text-decoration: none; border: none; cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
+  .btn-secondary {
+    background: transparent; color: var(--text);
+    font-weight: 600; font-size: 0.95rem;
+    padding: 0.8rem 2rem; border-radius: var(--radius);
+    text-decoration: none; border: 1px solid var(--border2); cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); transform: translateY(-1px); }
+
+  .hero-stats {
+    display: flex; justify-content: center; gap: 3rem; margin-top: 4rem;
+    flex-wrap: wrap;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat strong { font-size: 2rem; font-family: 'Oswald', sans-serif; color: var(--accent); }
+  .hero-stat span { display: block; font-size: 0.8rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* SECTIONS */
+  section { padding: 5rem 2rem; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  .section-header { margin-bottom: 3rem; }
+  .section-label {
+    font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--accent);
+    display: flex; align-items: center; gap: 8px; margin-bottom: 0.75rem;
+  }
+  .section-label::after { content: ''; flex: 0 0 32px; height: 1px; background: var(--accent); }
+  .section-header h2 {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 700; color: var(--text);
+  }
+  .section-header p { color: var(--text2); margin-top: 0.5rem; max-width: 540px; }
+
+  /* SERVERS */
+  #servers { background: var(--bg2); }
+  .servers-controls {
+    display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap;
+  }
+  .filter-btn {
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--text2); font-size: 0.85rem; font-weight: 600;
+    padding: 0.45rem 1rem; border-radius: 100px; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--accent-dim); border-color: rgba(232,160,32,0.35);
+    color: var(--accent2);
+  }
+  .servers-list { display: flex; flex-direction: column; gap: 1rem; }
+  .server-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 1.25rem 1.5rem;
+    display: grid; grid-template-columns: auto 1fr auto auto;
+    align-items: center; gap: 1rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .server-card:hover { border-color: var(--border2); background: var(--card2); }
+  .server-card.mod-server { border-left: 3px solid var(--accent); }
+  .server-icon {
+    width: 48px; height: 48px; border-radius: 10px;
+    background: var(--bg3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; flex-shrink: 0;
+  }
+  .server-info { min-width: 0; }
+  .server-name {
+    font-weight: 600; font-size: 0.95rem; color: var(--text);
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .tag {
+    font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.05em; padding: 2px 8px; border-radius: 100px;
+  }
+  .tag-mod { background: rgba(232,160,32,0.15); color: var(--accent); border: 1px solid rgba(232,160,32,0.25); }
+  .tag-nr { background: rgba(224,82,82,0.12); color: #f07070; border: 1px solid rgba(224,82,82,0.2); }
+  .tag-ets { background: rgba(76,175,110,0.12); color: #5fcf85; border: 1px solid rgba(76,175,110,0.2); }
+  .tag-ats { background: rgba(60,130,220,0.12); color: #70aaee; border: 1px solid rgba(60,130,220,0.2); }
+  .server-meta { font-size: 0.8rem; color: var(--text3); margin-top: 3px; }
+  .server-online {
+    text-align: center; min-width: 80px;
+  }
+  .online-num { font-family: 'Oswald', sans-serif; font-size: 1.4rem; font-weight: 700; }
+  .online-num.has-players { color: var(--green); }
+  .online-num.empty { color: var(--text3); }
+  .online-label { font-size: 0.72rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; }
+  .server-actions { display: flex; gap: 0.5rem; align-items: center; }
+  .btn-monitor {
+    background: var(--bg3); border: 1px solid var(--border);
+    color: var(--text2); font-size: 0.8rem; font-weight: 600;
+    padding: 0.45rem 0.9rem; border-radius: var(--radius);
+    text-decoration: none; transition: all 0.2s; white-space: nowrap;
+  }
+  .btn-monitor:hover { border-color: var(--border2); color: var(--text); }
+  .btn-mods {
+    background: var(--accent-dim); border: 1px solid rgba(232,160,32,0.3);
+    color: var(--accent); font-size: 0.8rem; font-weight: 700;
+    padding: 0.45rem 0.9rem; border-radius: var(--radius);
+    text-decoration: none; transition: all 0.2s; white-space: nowrap; cursor: pointer;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .btn-mods:hover { background: rgba(232,160,32,0.2); color: var(--accent2); }
+  .servers-loading { text-align: center; padding: 3rem; color: var(--text3); }
+  .servers-note { font-size: 0.8rem; color: var(--text3); margin-top: 1rem; text-align: right; }
+  .servers-note a { color: var(--accent); text-decoration: none; }
+
+  /* RULES */
+  #rules { background: var(--bg); }
+  .rules-tabs { display: flex; gap: 0.5rem; margin-bottom: 2rem; }
+  .rule-tab {
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--text2); font-size: 0.875rem; font-weight: 600;
+    padding: 0.55rem 1.25rem; border-radius: 100px; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .rule-tab.active {
+    background: var(--accent); border-color: var(--accent);
+    color: #0d0f14;
+  }
+  .rules-content { display: none; }
+  .rules-content.active { display: block; }
+
+  .rules-intro {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 1.5rem;
+    margin-bottom: 1.5rem; color: var(--text2); font-size: 0.95rem;
+  }
+  .rules-intro strong { color: var(--text); }
+
+  .rules-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1rem; margin-bottom: 1.5rem;
+  }
+  .rules-block {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 1.5rem;
+  }
+  .rules-block.forbidden { border-top: 2px solid var(--red); }
+  .rules-block.allowed { border-top: 2px solid var(--green); }
+  .rules-block.info { border-top: 2px solid #5a8fe0; grid-column: 1 / -1; }
+  .rules-block h3 {
+    font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .rules-block.forbidden h3 { color: var(--red); }
+  .rules-block.allowed h3 { color: var(--green); }
+  .rules-block.info h3 { color: #7aabf5; }
+  .rule-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 0.6rem 0; border-bottom: 1px solid var(--border);
+    font-size: 0.875rem;
+  }
+  .rule-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .rule-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
+  .rule-text { color: var(--text2); line-height: 1.5; }
+  .rule-text strong { color: var(--text); font-weight: 500; }
+  .rule-sub { font-size: 0.8rem; color: var(--text3); margin-top: 3px; }
+
+  .rules-punishment {
+    background: rgba(224,82,82,0.07); border: 1px solid rgba(224,82,82,0.15);
+    border-radius: var(--radius); padding: 1rem 1.25rem;
+    font-size: 0.875rem; color: var(--text2);
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  /* DLC */
+  #dlc { background: var(--bg2); }
+  .dlc-big-btn {
+    flex: 1 1 280px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 1.5rem 1.75rem;
+    display: flex; align-items: center; gap: 1.25rem;
+    text-decoration: none; transition: all 0.2s; cursor: pointer;
+    border-left: 3px solid var(--accent);
+  }
+  .dlc-big-btn:hover { border-color: rgba(232,160,32,0.5); background: var(--card2); transform: translateY(-2px); }
+  .dlc-ats { border-left-color: #70aaee; }
+  .dlc-ats:hover { border-color: rgba(112,170,238,0.5); }
+  .dlc-big-icon {
+    width: 52px; height: 52px; border-radius: 12px;
+    background: var(--accent-dim); border: 1px solid rgba(232,160,32,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; flex-shrink: 0;
+  }
+  .dlc-ats .dlc-big-icon { background: rgba(112,170,238,0.1); border-color: rgba(112,170,238,0.2); }
+  .dlc-big-title { font-size: 1rem; font-weight: 700; color: var(--text); }
+  .dlc-big-sub { font-size: 0.8rem; color: var(--text3); margin-top: 3px; }
+  .dlc-arrow { margin-left: auto; font-size: 1.2rem; color: var(--text3); flex-shrink: 0; transition: transform 0.2s; }
+  .dlc-big-btn:hover .dlc-arrow { transform: translateX(4px); color: var(--accent); }
+
+  /* GUIDES */
+  #guides { background: var(--bg); }
+  .guides-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem; }
+  .guide-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .guide-card:hover { border-color: var(--border2); }
+  .guide-head {
+    padding: 1.25rem 1.5rem 1rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .guide-emoji {
+    width: 42px; height: 42px; border-radius: 10px;
+    background: var(--bg3); display: flex; align-items: center;
+    justify-content: center; font-size: 1.2rem;
+  }
+  .guide-head h3 { font-size: 1rem; font-weight: 700; color: var(--text); }
+  .guide-head p { font-size: 0.8rem; color: var(--text3); margin-top: 2px; }
+  .guide-steps { padding: 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 0.85rem; }
+  .guide-step { display: flex; align-items: flex-start; gap: 12px; }
+  .step-num {
+    flex-shrink: 0; width: 24px; height: 24px; border-radius: 6px;
+    background: var(--accent-dim); border: 1px solid rgba(232,160,32,0.25);
+    color: var(--accent); font-size: 0.75rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step-text { font-size: 0.875rem; color: var(--text2); line-height: 1.5; padding-top: 2px; }
+  .step-text strong { color: var(--text); }
+  .step-text code {
+    background: var(--bg3); border: 1px solid var(--border2);
+    border-radius: 4px; padding: 1px 6px;
+    font-family: monospace; font-size: 0.82em; color: var(--accent2);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg2); border-top: 1px solid var(--border);
+    padding: 3rem 2rem;
+  }
+  .footer-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 2rem; align-items: center;
+  }
+  .footer-brand .logo { font-size: 1.1rem; margin-bottom: 0.5rem; display: inline-flex; }
+  .footer-brand p { font-size: 0.85rem; color: var(--text3); max-width: 320px; }
+  .footer-social { display: flex; flex-direction: column; gap: 0.75rem; align-items: flex-end; }
+  .social-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); }
+  .social-links { display: flex; gap: 0.5rem; }
+  .social-link {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--card); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; font-size: 1.1rem;
+    transition: all 0.2s;
+  }
+  .social-link:hover { border-color: var(--border2); background: var(--card2); transform: translateY(-2px); }
+  .footer-copy { text-align: center; color: var(--text3); font-size: 0.8rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); max-width: 1200px; margin-left: auto; margin-right: auto; }
+
+  /* STATUS DOT */
+  .status-dot { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:7px; flex-shrink:0; }
+  .online-dot  { background:#4caf6e; box-shadow:0 0 6px rgba(76,175,110,0.6); animation: pulse 2s infinite; }
+  .offline-dot { background:#e05252; }
+
+  /* MODAL */
+  .modal-overlay {
+    position:fixed; inset:0; z-index:1000;
+    background:rgba(4,6,12,0.82); backdrop-filter:blur(6px);
+    display:flex; align-items:center; justify-content:center;
+    padding:1.5rem;
+    opacity:0; pointer-events:none;
+    transition:opacity 0.22s;
+  }
+  .modal-overlay.open { opacity:1; pointer-events:all; }
+  .modal-box {
+    background:var(--bg2); border:1px solid var(--border2);
+    border-radius:var(--radius-lg); width:100%; max-width:520px;
+    box-shadow:0 24px 80px rgba(0,0,0,0.6);
+    transform:translateY(16px) scale(0.98);
+    transition:transform 0.25s;
+  }
+  .modal-overlay.open .modal-box { transform:translateY(0) scale(1); }
+  .modal-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:1.25rem 1.5rem; border-bottom:1px solid var(--border);
+  }
+  .modal-title-wrap { display:flex; align-items:center; gap:10px; }
+  .modal-title { font-family:'Oswald',sans-serif; font-size:1.15rem; font-weight:700; color:var(--text); }
+  .modal-close {
+    width:32px; height:32px; border-radius:8px;
+    background:var(--card); border:1px solid var(--border);
+    color:var(--text3); font-size:0.9rem; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:all 0.15s;
+  }
+  .modal-close:hover { background:var(--card2); color:var(--text); border-color:var(--border2); }
+  .modal-note {
+    margin:1.25rem 1.5rem 0.75rem;
+    background:rgba(232,160,32,0.07); border:1px solid rgba(232,160,32,0.18);
+    border-radius:var(--radius); padding:0.85rem 1rem;
+    font-size:0.82rem; color:var(--text2); line-height:1.5;
+  }
+  .modal-links { display:flex; flex-direction:column; gap:0.5rem; padding:0.5rem 1.5rem 1.5rem; }
+  .mod-link-item {
+    display:flex; align-items:center; gap:12px;
+    background:var(--card); border:1px solid var(--border);
+    border-radius:var(--radius); padding:0.9rem 1rem;
+    text-decoration:none; transition:all 0.18s; color:inherit;
+  }
+  .mod-link-item:hover { border-color:rgba(232,160,32,0.35); background:var(--card2); }
+  .mod-link-soon { opacity:0.5; cursor:default; }
+  .mod-link-soon:hover { border-color:var(--border); background:var(--card); }
+  .mod-link-icon { font-size:1.2rem; flex-shrink:0; }
+  .mod-link-info { flex:1; min-width:0; }
+  .mod-link-title { font-size:0.9rem; font-weight:600; color:var(--text); }
+  .mod-link-sub { font-size:0.75rem; color:var(--text3); margin-top:2px; }
+  .mod-link-arrow { color:var(--accent); font-size:1rem; flex-shrink:0; transition:transform 0.15s; }
+  .mod-link-item:hover .mod-link-arrow { transform:translateX(3px); }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    .server-card { grid-template-columns: auto 1fr; grid-template-rows: auto auto; }
+    .server-online { display: none; }
+    .server-actions { justify-content: flex-start; }
+    .rules-grid { grid-template-columns: 1fr; }
+    .rules-block.info { grid-column: 1; }
+    .footer-inner { grid-template-columns: 1fr; }
+    .footer-social { align-items: flex-start; }
+    .hero-stats { gap: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-road">
+    <svg viewBox="0 0 1440 900" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;position:absolute;inset:0;">
+      <defs>
+        <radialGradient id="sky" cx="50%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#1a2540"/>
+          <stop offset="100%" stop-color="#080a10"/>
+        </radialGradient>
+        <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#e8a020" stop-opacity="0.18"/>
+          <stop offset="100%" stop-color="#e8a020" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="road" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#151820"/>
+          <stop offset="100%" stop-color="#0a0c12"/>
+        </linearGradient>
+        <linearGradient id="roadfade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#080a10" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#080a10" stop-opacity="1"/>
+        </linearGradient>
+        <filter id="blur2">
+          <feGaussianBlur stdDeviation="2"/>
+        </filter>
+        <filter id="blur6">
+          <feGaussianBlur stdDeviation="6"/>
+        </filter>
+        <filter id="blur12">
+          <feGaussianBlur stdDeviation="12"/>
+        </filter>
+      </defs>
+
+      <!-- Sky -->
+      <rect width="1440" height="900" fill="url(#sky)"/>
+
+      <!-- Stars -->
+      <g opacity="0.6">
+        <circle cx="120" cy="80" r="1" fill="white" opacity="0.8"/>
+        <circle cx="280" cy="40" r="1.5" fill="white" opacity="0.6"/>
+        <circle cx="450" cy="100" r="1" fill="white" opacity="0.9"/>
+        <circle cx="600" cy="55" r="1" fill="white" opacity="0.5"/>
+        <circle cx="750" cy="30" r="1.5" fill="white" opacity="0.7"/>
+        <circle cx="900" cy="90" r="1" fill="white" opacity="0.8"/>
+        <circle cx="1050" cy="45" r="1" fill="white" opacity="0.6"/>
+        <circle cx="1200" cy="70" r="1.5" fill="white" opacity="0.9"/>
+        <circle cx="1350" cy="35" r="1" fill="white" opacity="0.5"/>
+        <circle cx="200" cy="150" r="1" fill="white" opacity="0.4"/>
+        <circle cx="380" cy="170" r="1" fill="white" opacity="0.6"/>
+        <circle cx="820" cy="130" r="1" fill="white" opacity="0.5"/>
+        <circle cx="1100" cy="160" r="1" fill="white" opacity="0.4"/>
+        <circle cx="1300" cy="120" r="1.5" fill="white" opacity="0.6"/>
+        <circle cx="70" cy="200" r="1" fill="white" opacity="0.3"/>
+        <circle cx="500" cy="180" r="1" fill="white" opacity="0.5"/>
+        <circle cx="960" cy="200" r="1" fill="white" opacity="0.4"/>
+      </g>
+
+      <!-- Distant mountains / horizon -->
+      <g opacity="0.35">
+        <polygon points="0,420 100,320 220,380 350,290 500,360 620,280 740,340 860,270 1000,340 1150,260 1300,330 1440,270 1440,440 0,440" fill="#1e2535"/>
+        <polygon points="0,440 80,370 200,410 340,360 480,400 600,350 720,390 860,345 980,385 1120,340 1260,380 1440,350 1440,450 0,450" fill="#141926"/>
+      </g>
+
+      <!-- Distant city glow on horizon -->
+      <ellipse cx="720" cy="445" rx="400" ry="40" fill="#e8a020" opacity="0.04" filter="url(#blur12)"/>
+      <ellipse cx="720" cy="450" rx="200" ry="20" fill="#e8c060" opacity="0.06" filter="url(#blur6)"/>
+
+      <!-- Distant lights (city silhouette) -->
+      <g opacity="0.5">
+        <rect x="580" y="420" width="3" height="12" fill="#ffdd88" opacity="0.6"/>
+        <rect x="620" y="415" width="2" height="17" fill="#ffdd88" opacity="0.5"/>
+        <rect x="650" y="422" width="4" height="10" fill="#ffdd88" opacity="0.4"/>
+        <rect x="700" y="418" width="2" height="14" fill="#ffcc66" opacity="0.6"/>
+        <rect x="730" y="416" width="3" height="16" fill="#ffdd88" opacity="0.5"/>
+        <rect x="760" y="420" width="2" height="12" fill="#ffdd88" opacity="0.4"/>
+        <rect x="800" y="417" width="4" height="15" fill="#ffcc66" opacity="0.6"/>
+        <rect x="840" y="421" width="3" height="11" fill="#ffdd88" opacity="0.5"/>
+      </g>
+
+      <!-- Road surface -->
+      <polygon points="200,900 450,460 990,460 1240,900" fill="url(#road)"/>
+      <!-- Road edges / kerb -->
+      <polygon points="200,900 250,900 490,460 450,460" fill="#1c2030"/>
+      <polygon points="1190,900 1240,900 990,460 950,460" fill="#1c2030"/>
+
+      <!-- Road lane markings -->
+      <g opacity="0.55">
+        <!-- center dashes -->
+        <polygon points="690,500 750,500 748,510 688,510" fill="#e8a020" opacity="0.7"/>
+        <polygon points="672,540 732,540 729,555 669,555" fill="#e8a020" opacity="0.65"/>
+        <polygon points="648,590 710,590 706,612 644,612" fill="#e8a020" opacity="0.6"/>
+        <polygon points="614,655 680,655 674,685 608,685" fill="#e8a020" opacity="0.5"/>
+        <polygon points="566,740 640,740 632,780 558,780" fill="#e8a020" opacity="0.4"/>
+        <polygon points="500,840 582,840 570,900 488,900" fill="#e8a020" opacity="0.3"/>
+        <!-- right lane dash -->
+        <polygon points="840,500 880,500 878,510 838,510" fill="white" opacity="0.3"/>
+        <polygon points="855,540 898,540 895,555 852,555" fill="white" opacity="0.28"/>
+        <polygon points="880,590 930,590 926,612 876,612" fill="white" opacity="0.25"/>
+        <polygon points="916,655 972,655 966,685 910,685" fill="white" opacity="0.2"/>
+        <!-- left lane dash -->
+        <polygon points="558,500 600,500 598,510 556,510" fill="white" opacity="0.3"/>
+        <polygon points="540,540 583,540 580,555 537,555" fill="white" opacity="0.28"/>
+        <polygon points="510,590 558,590 554,612 506,612" fill="white" opacity="0.25"/>
+        <polygon points="472,655 526,655 520,685 466,685" fill="white" opacity="0.2"/>
+      </g>
+
+      <!-- Truck headlights coming toward (left lane) -->
+      <ellipse cx="590" cy="540" rx="60" ry="20" fill="#ffe8b0" opacity="0.12" filter="url(#blur12)"/>
+      <ellipse cx="590" cy="540" rx="20" ry="8" fill="#fff5d0" opacity="0.25" filter="url(#blur2)"/>
+      <circle cx="578" cy="538" r="5" fill="#fffbe0" opacity="0.9"/>
+      <circle cx="602" cy="538" r="5" fill="#fffbe0" opacity="0.9"/>
+      <!-- Truck silhouette coming toward -->
+      <g opacity="0.55">
+        <rect x="556" y="488" width="68" height="46" rx="3" fill="#1a1f2e"/>
+        <rect x="560" y="480" width="42" height="28" rx="2" fill="#141825"/>
+        <rect x="560" y="479" width="42" height="8" rx="1" fill="#1e2535"/>
+        <!-- cab window -->
+        <rect x="563" y="482" width="14" height="10" rx="1" fill="#2a3550" opacity="0.8"/>
+        <rect x="580" y="482" width="19" height="10" rx="1" fill="#2a3550" opacity="0.8"/>
+        <!-- wheels -->
+        <circle cx="567" cy="534" r="6" fill="#0d0f14"/>
+        <circle cx="615" cy="534" r="6" fill="#0d0f14"/>
+      </g>
+
+      <!-- Truck taillights going away (right lane) -->
+      <ellipse cx="860" cy="560" rx="55" ry="18" fill="#cc2200" opacity="0.15" filter="url(#blur12)"/>
+      <ellipse cx="860" cy="560" rx="18" ry="7" fill="#ff4422" opacity="0.3" filter="url(#blur2)"/>
+      <circle cx="848" cy="558" r="4" fill="#ff3311" opacity="0.95"/>
+      <circle cx="872" cy="558" r="4" fill="#ff3311" opacity="0.95"/>
+      <!-- Truck silhouette going away -->
+      <g opacity="0.45">
+        <rect x="822" y="500" width="76" height="55" rx="3" fill="#12151e"/>
+        <rect x="826" y="490" width="48" height="32" rx="2" fill="#0e1018"/>
+        <!-- window reflection -->
+        <rect x="830" y="493" width="16" height="12" rx="1" fill="#1a2235" opacity="0.6"/>
+        <rect x="850" y="493" width="20" height="12" rx="1" fill="#1a2235" opacity="0.6"/>
+        <!-- wheels -->
+        <circle cx="835" cy="555" r="7" fill="#0a0c10"/>
+        <circle cx="888" cy="555" r="7" fill="#0a0c10"/>
+      </g>
+
+      <!-- Road lamp posts -->
+      <g opacity="0.7">
+        <!-- left side -->
+        <line x1="290" y1="460" x2="340" y2="900" stroke="#2a2e3d" stroke-width="3"/>
+        <circle cx="290" cy="460" r="6" fill="#ffee99" opacity="0.9"/>
+        <ellipse cx="290" cy="468" rx="40" ry="15" fill="#ffee99" opacity="0.08" filter="url(#blur6)"/>
+        <line x1="160" y1="460" x2="190" y2="700" stroke="#2a2e3d" stroke-width="3"/>
+        <circle cx="160" cy="460" r="6" fill="#ffee99" opacity="0.7"/>
+        <!-- right side -->
+        <line x1="1150" y1="460" x2="1100" y2="900" stroke="#2a2e3d" stroke-width="3"/>
+        <circle cx="1150" cy="460" r="6" fill="#ffee99" opacity="0.9"/>
+        <ellipse cx="1150" cy="468" rx="40" ry="15" fill="#ffee99" opacity="0.08" filter="url(#blur6)"/>
+        <line x1="1280" y1="460" x2="1250" y2="700" stroke="#2a2e3d" stroke-width="3"/>
+        <circle cx="1280" cy="460" r="6" fill="#ffee99" opacity="0.7"/>
+      </g>
+
+      <!-- Trees silhouette left -->
+      <g opacity="0.4">
+        <rect x="60" y="390" width="8" height="70" fill="#0e1218"/>
+        <ellipse cx="64" cy="390" rx="22" ry="35" fill="#0e1218"/>
+        <rect x="110" y="400" width="6" height="60" fill="#0e1218"/>
+        <ellipse cx="113" cy="400" rx="18" ry="28" fill="#101520"/>
+        <rect x="20" y="410" width="5" height="50" fill="#0e1218"/>
+        <ellipse cx="22" cy="410" rx="14" ry="22" fill="#0e1218"/>
+      </g>
+      <!-- Trees silhouette right -->
+      <g opacity="0.4">
+        <rect x="1360" y="390" width="8" height="70" fill="#0e1218"/>
+        <ellipse cx="1364" cy="390" rx="22" ry="35" fill="#0e1218"/>
+        <rect x="1310" y="405" width="6" height="55" fill="#0e1218"/>
+        <ellipse cx="1313" cy="405" rx="18" ry="28" fill="#101520"/>
+        <rect x="1400" y="415" width="5" height="45" fill="#0e1218"/>
+        <ellipse cx="1402" cy="415" rx="14" ry="22" fill="#0e1218"/>
+      </g>
+
+      <!-- Vanishing point glow -->
+      <ellipse cx="720" cy="460" rx="120" ry="30" fill="url(#glow)" filter="url(#blur6)"/>
+
+      <!-- Fade overlay bottom -->
+      <rect width="1440" height="900" fill="url(#roadfade)"/>
+      <!-- Fade overlay top -->
+      <rect width="1440" height="300" fill="url(#sky)" opacity="0.5"/>
+
+      <!-- Subtle vignette -->
+      <radialGradient id="vign" cx="50%" cy="50%" r="70%">
+        <stop offset="0%" stop-color="transparent"/>
+        <stop offset="100%" stop-color="#04060a" stop-opacity="0.7"/>
+      </radialGradient>
+      <rect width="1440" height="900" fill="url(#vign)"/>
+    </svg>
+  </div>
+  <div class="hero-content">
+    <h1>Перевозки<br><em>Без Границ</em></h1>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <strong>7</strong>
+        <span style="color: #ffffff !important; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95) !important;">Серверов</span>
+      </div>
+      <div class="hero-stat">
+        <strong id="totalPlayers">—</strong>
+        <span style="color: #ffffff !important; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95) !important;">Игроков сейчас</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVERS -->
+<section id="servers">
+  <div class="container">
+    <div class="section-header" style="margin-bottom:2rem">
+      <h2>Наши серверы</h2>
+    </div>
+    <div class="servers-list" id="serverList">
+      <div class="servers-loading">⏳ Загружаем информацию о серверах...</div>
+    </div>
+    <p class="servers-note">Данные: <a href="https://gamemonitoring.ru/users/nikplay4411/servers" target="_blank">GameMonitoring</a></p>
+  </div>
+</section>
+
+<!-- RULES -->
+<section id="rules">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Правила проекта</div>
+      <p>Соблюдение правил — залог комфортной игры для всех участников.</p>
+    </div>
+    <div class="rules-tabs">
+      <button class="rule-tab active" onclick="showRules('general', this)">Общие правила</button>
+      <button class="rule-tab" onclick="showRules('mods', this)">Модовые</button>
+      <button class="rule-tab" onclick="showRules('norules', this)">Без правил</button>
+    </div>
+
+    <!-- GENERAL -->
+    <div class="rules-content active" id="rules-general">
+      <div class="rules-intro">
+        🎉 <strong>Добро пожаловать!</strong> Чтобы каждый участник чувствовал себя комфортно, просим ознакомиться с правилами. Модераторы оставляют за собой право принимать решения в спорных ситуациях.
+      </div>
+      <div class="rules-grid">
+        <div class="rules-block forbidden">
+          <h3>🚫 Запрещено</h3>
+          <div class="rule-item">
+            <span class="rule-icon">💥</span>
+            <div class="rule-text">
+              <strong>Телепортация на проезжую часть</strong>
+              <div class="rule-sub">Не телепортируйтесь в поток движения — это вызывает аварии</div>
+            </div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-icon">🛠️</span>
+            <div class="rule-text"><strong>Использование модов и прописок</strong><div class="rule-sub">Любые несогласованные моды запрещены</div></div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-icon">🚛</span>
+            <div class="rule-text"><strong>Более двух прицепов</strong><div class="rule-sub">Там, где это территориально запрещено</div></div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-icon">🤬</span>
+            <div class="rule-text"><strong>Оскорбления и провокации</strong><div class="rule-sub">Троллинг, нецензурщина, агрессия — всё запрещено</div></div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-icon">🔊</span>
+            <div class="rule-text"><strong>Засорение рации и голосового чата</strong><div class="rule-sub">Спам, повторы, громкая музыка в микрофон</div></div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-icon">🏎️</span>
+            <div class="rule-text"><strong>Обгон конвоя без предупреждения</strong><div class="rule-sub">В крайней необходимости — обязательно уведомить в чат</div></div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-icon">😠</span>
+            <div class="rule-text"><strong>Агрессивное поведение на дороге</strong><div class="rule-sub">Блокировки, тараны, подрезания — даже в ответ на провокацию</div></div>
+          </div>
+        </div>
+        <div class="rules-block allowed">
+          <h3>✅ Разрешено</h3>
+          <div class="rule-item">
+            <span class="rule-icon">🛣️</span>
+            <div class="rule-text">
+              <strong>Телепортация в безопасные места</strong>
+              <div class="rule-sub">Обочина, тротуар, АЗС/СТО, кемпинги (позади колонны!), автосалоны, погрузочные базы</div>
+            </div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-icon">💬</span>
+            <div class="rule-text"><strong>Вежливое общение</strong><div class="rule-sub">Дружелюбный тон приветствуется всегда</div></div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-icon">🤝</span>
+            <div class="rule-text"><strong>Спокойное обсуждение с модераторами</strong><div class="rule-sub">Есть вопрос — обсудим без конфликтов</div></div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-icon">🚗</span>
+            <div class="rule-text"><strong>Обгон с предупреждением</strong><div class="rule-sub">Обязательно уведомить в чат или голосом перед обгоном</div></div>
+          </div>
+        </div>
+        <div class="rules-block info">
+          <h3>ℹ️ Режим работы и наказания</h3>
+          <div class="rule-item">
+            <span class="rule-icon">🕰️</span>
+            <div class="rule-text"><strong>Перезагрузка сервера</strong> — ежедневно в <strong>06:00</strong> и <strong>18:00</strong> по московскому времени</div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-icon">⚠️</span>
+            <div class="rule-text">За первое нарушение — <strong>предупреждение</strong>. За многократные нарушения — <strong>бан навсегда</strong></div>
+          </div>
+          <div class="rule-item">
+            <span class="rule-icon">🛡️</span>
+            <div class="rule-text">Наша цель — <strong>безопасный, дружелюбный и организованный сервер</strong>, где каждый водитель чувствует себя частью команды</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODS -->
+    <div class="rules-content" id="rules-mods">
+      <div class="rules-intro">
+        🛠️ <strong>Модовые серверы</strong> — всё как в общих правилах, плюс дополнительные ограничения, связанные с модами. Используются только <strong>официально разрешённые моды проекта</strong>.
+      </div>
+      <div class="rules-grid">
+        <div class="rules-block forbidden">
+          <h3>🚫 Запрещено</h3>
+          <div class="rule-item"><span class="rule-icon">📦</span><div class="rule-text"><strong>Сторонние моды</strong><div class="rule-sub">Любые моды, не входящие в официальный пак сервера</div></div></div>
+          <div class="rule-item"><span class="rule-icon">⚡</span><div class="rule-text"><strong>Прописки и читы</strong><div class="rule-sub">Любые модификации, дающие нечестное преимущество</div></div></div>
+          <div class="rule-item"><span class="rule-icon">💥</span><div class="rule-text"><strong>Телепортация на проезжую часть</strong><div class="rule-sub">Та же строгость, что и на обычных серверах</div></div></div>
+          <div class="rule-item"><span class="rule-icon">🤬</span><div class="rule-text"><strong>Оскорбления и агрессия</strong><div class="rule-sub">Все общие запреты в силе</div></div></div>
+        </div>
+        <div class="rules-block allowed">
+          <h3>✅ Разрешено</h3>
+          <div class="rule-item"><span class="rule-icon">📦</span><div class="rule-text"><strong>Официальный мод-пак сервера</strong><div class="rule-sub">Скачать можно по кнопке «Скачать модификации» на карточке сервера</div></div></div>
+          <div class="rule-item"><span class="rule-icon">🚛</span><div class="rule-text"><strong>Моддированные грузовики и прицепы</strong><div class="rule-sub">Из официального пака сервера</div></div></div>
+          <div class="rule-item"><span class="rule-icon">🛣️</span><div class="rule-text"><strong>Телепортация в безопасные зоны</strong></div></div>
+        </div>
+        <div class="rules-block info">
+          <h3>ℹ️ Как установить моды</h3>
+          <div class="rule-item"><span class="rule-icon">📖</span><div class="rule-text">Подробная инструкция по установке модов — в разделе <a href="#guides" style="color:var(--accent)">Гайды</a> на этой странице</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NORULES -->
+    <div class="rules-content" id="rules-norules">
+      <div class="rules-intro">
+        🔴 <strong>Сервер «Без правил»</strong> — максимально свободный формат игры. Большинство ограничений снято, но базовые нормы поведения остаются.
+      </div>
+      <div class="rules-grid">
+        <div class="rules-block forbidden">
+          <h3>🚫 Всё равно запрещено</h3>
+          <div class="rule-item"><span class="rule-icon">🤬</span><div class="rule-text"><strong>Целенаправленные оскорбления и харассмент</strong><div class="rule-sub">Хаос на дороге — ок, но агрессия против людей — нет</div></div></div>
+          <div class="rule-item"><span class="rule-icon">🔊</span><div class="rule-text"><strong>Злоупотребление голосовым чатом</strong><div class="rule-sub">Громкая музыка и спам в эфире мешают всем</div></div></div>
+          <div class="rule-item"><span class="rule-icon">⚡</span><div class="rule-text"><strong>Прописки и читы</strong></div></div>
+        </div>
+        <div class="rules-block allowed">
+          <h3>✅ Разрешено</h3>
+          <div class="rule-item"><span class="rule-icon">🚗</span><div class="rule-text"><strong>Свободное движение</strong><div class="rule-sub">Аварии, обгоны, нестандартная езда — всё в рамках игры</div></div></div>
+          <div class="rule-item"><span class="rule-icon">🚛</span><div class="rule-text"><strong>Любое количество прицепов</strong><div class="rule-sub">Ограничения на прицепы сняты</div></div></div>
+          <div class="rule-item"><span class="rule-icon">💬</span><div class="rule-text"><strong>Свободное общение</strong><div class="rule-sub">Главное — без намеренных оскорблений</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DLC -->
+<section id="dlc">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Дополнения</div>
+      <h2>Скачать DLC</h2>
+      <p>Все дополнения для игры — в одном месте. Файлы размещены на Google Диске.</p>
+    </div>
+    <div style="display:flex;gap:1.25rem;flex-wrap:wrap;">
+      <a class="dlc-big-btn" href="https://drive.google.com/drive/folders/1tTaAhmR5WWcFN3Tl8QRFnOSiubaDqBPY?usp=sharing" target="_blank">
+        <div class="dlc-big-icon">🚛</div>
+        <div>
+          <div class="dlc-big-title">Загрузить DLC ETS2</div>
+          <div class="dlc-big-sub">Euro Truck Simulator 2 — дополнения</div>
+        </div>
+        <span class="dlc-arrow">→</span>
+      </a>
+      <a class="dlc-big-btn dlc-ats" href="https://drive.google.com/drive/folders/1F0WKtDKgXCOm-IrnR8nWURtrW9DgtbD1?usp=sharing" target="_blank">
+        <div class="dlc-big-icon">🚚</div>
+        <div>
+          <div class="dlc-big-title">Загрузить DLC ATS</div>
+          <div class="dlc-big-sub">American Truck Simulator — дополнения</div>
+        </div>
+        <span class="dlc-arrow">→</span>
+      </a>
+    </div>
+    <p style="font-size:0.82rem;color:var(--text3);margin-top:1.25rem;"></p>
+  </div>
+</section>
+
+<!-- GUIDES -->
+<section id="guides">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Помощь и настройка</div>
+      <p>Всё необходимое для комфортной игры на наших серверах.</p>
+    </div>
+    <div class="guides-grid">
+
+      <!-- GUIDE 1: MODS -->
+      <div class="guide-card">
+        <div class="guide-head">
+          <div class="guide-emoji">🛠️</div>
+          <div>
+            <h3>Как установить модификации</h3>
+            <p>Для модовых серверов</p>
+          </div>
+        </div>
+        <div class="guide-steps">
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-text">Скачайте <strong>модификации нужного сервера</strong> по кнопке «Загрузить модификации» на карточке сервера</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-text">Распакуйте архив. Внутри будут файлы с расширением <code>.scs</code> и <code>.zip</code> — <strong>архивы .zip распаковывать не нужно</strong></div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-text">Скопируйте все файлы в папку модов:<br><code>Мои документы / Euro Truck Simulator 2 / mod</code></div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">4</div>
+            <div class="step-text"><strong>Не активируя моды вручную</strong> — войдите в режим Конвой, найдите нужный сервер и нажмите <strong>«Активировать модификации сервера»</strong>. Игра сама расставит приоритеты</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">5</div>
+            <div class="step-text">После активации подключитесь к серверу — готово!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GUIDE 2: CONSOLE + CONVOY -->
+      <div class="guide-card">
+        <div class="guide-head">
+          <div class="guide-emoji">💻</div>
+          <div>
+            <h3>Консоль и конвои до 128 игроков</h3>
+            <p>Включение консоли и расширение лимита</p>
+          </div>
+        </div>
+        <div class="guide-steps">
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-text">Откройте файл конфигурации:<br><code>Мои документы / Euro Truck Simulator 2 / config.cfg</code></div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-text">Найдите строку <code>uset g_developer "0"</code> и измените на <code>"1"</code></div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-text">Найдите строку <code>uset g_console "0"</code> и измените на <code>"1"</code>. Сохраните файл</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">4</div>
+            <div class="step-text">Запустите игру, войдите в <strong>режим Конвой</strong> и откройте консоль клавишей <code>~</code> (тильда)</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">5</div>
+            <div class="step-text">Введите команду <code>g_max_convoy_players 128</code> и нажмите <code>Enter</code> — теперь доступно до <strong>128 игроков</strong> в сессии</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GUIDE 3: DLC -->
+      <div class="guide-card">
+        <div class="guide-head">
+          <div class="guide-emoji">📦</div>
+          <div>
+            <h3>Как установить DLC</h3>
+            <p>Дополнения для ETS2 и ATS</p>
+          </div>
+        </div>
+        <div class="guide-steps">
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-text">Скачайте нужный DLC-архив из раздела <strong>«Скачать DLC»</strong> выше на этой странице</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-text">Распакуйте архив в любую удобную папку</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-text">Скопируйте файлы DLC в папку игры:<br><code>Steam / steamapps / common / Euro Truck Simulator 2</code></div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">4</div>
+            <div class="step-text">Запустите игру — DLC будет доступно автоматически без дополнительных действий</div>
+          </div>
+          <div class="guide-step">
+            <div class="step-num">5</div>
+            <div class="step-text">Если DLC не отображается — проверьте целостность файлов через <strong>Steam → ПКМ по игре → Свойства → Локальные файлы</strong></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a class="logo" href="#">🚛 <span>ПЕРЕВОЗКИ БЕЗ ГРАНИЦ</span></a>
+      <p style="margin-top:0.75rem">Русский ETS2 & ATS проект. Дружное сообщество, конвои и моды.</p>
+      <p style="margin-top:0.5rem;font-size:0.8rem;color:var(--text3)">Поддержать проект: <a href="https://www.donationalerts.com/r/nikplay4411" style="color:var(--accent);text-decoration:none" target="_blank">DonationAlerts</a></p>
+    </div>
+    <div class="footer-social">
+      <span class="social-label">Мы в соцсетях</span>
+      <div class="social-links">
+        <a class="social-link" href="https://vk.com/club229667273" title="ВКонтакте" target="_blank">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color:#4a76a8"><path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.408 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.862-.525-2.049-1.714-1.032-1-1.49-.9-1.743-.9-.356 0-.458.102-.458.593v1.566c0 .424-.135.677-1.253.677-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4.03 8.57 4.03 8.096c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.677.863 2.49 2.303 4.675 2.896 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.204.17-.407.44-.407h2.744c.373 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.813-.542 1.254-1.406 2.151-3.574 2.151-3.574.119-.254.322-.491.762-.491h1.744c.525 0 .643.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.779 1.203 1.253.745.847 1.32 1.558 1.473 2.05.17.49-.085.745-.576.745z"/></svg>
+        </a>
+        <a class="social-link" href="https://t.me/T9Cj1UNiH0o2ZDNi" title="Telegram" target="_blank">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color:#29a8eb"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-copy">
+    © 2025 Перевозки без границ — все права защищены. Проект не аффилирован с SCS Software.
+  </div>
+</footer>
+
+<script>
+// ---- SERVER CONFIG с реальными API ID ----
+const serversConfig = [
+  { id: 11489923, name: 'Перевозки без границ #1',       game: 'ets', type: 'normal',  icon: '🚛', monUrl: 'https://gamemonitoring.net/euro-truck-simulator-2/servers/11489923' },
+  { id: 11491750, name: 'Перевозки без границ #2',       game: 'ets', type: 'normal',  icon: '🚛', monUrl: 'https://gamemonitoring.net/euro-truck-simulator-2/servers/11491750' },
+  { id: 11384788, name: 'Перевозки без границ #3',       game: 'ets', type: 'normal',  icon: '🚛', monUrl: 'https://gamemonitoring.net/euro-truck-simulator-2/servers/11384788' },
+  { id: 11491753, name: 'Перевозки без границ #NO-RULES',game: 'ets', type: 'norules', icon: '🔴', monUrl: 'https://gamemonitoring.net/euro-truck-simulator-2/servers/11491753' },
+  { id: 11489035, name: 'Перевозки без границ #MODS',    game: 'ets', type: 'mod',     icon: '🚛', monUrl: 'https://gamemonitoring.net/euro-truck-simulator-2/servers/11489035' },
+  { divider: 'ats' },
+  { id: 11778762, name: 'Перевозки без границ #1',       game: 'ats', type: 'normal',  icon: '🚚', monUrl: 'https://gamemonitoring.net/american-truck-simulator/servers/11778762' },
+  { id: 11492529, name: 'Перевозки без границ #MODS',    game: 'ats', type: 'mod',     icon: '🚚', monUrl: 'https://gamemonitoring.net/american-truck-simulator/servers/11492529' },
+];
+
+// Моды по типу сервера
+const modLinks = {
+  ets: [
+    { label: 'Модификации ETS2 — Папка 1', url: 'https://drive.google.com/drive/folders/1zfS-txaC_u5GHp-HEcucSjD-OgVEBU5i?usp=sharing', size: 'Google Диск' },
+    { label: 'Модификации ETS2 — Папка 2', url: 'https://drive.google.com/drive/folders/1QVlrH7yz2WoP9R5J9yEn2QG6fh1tzu0P?usp=sharing', size: 'Google Диск' },
+  ],
+  ats: [
+    { label: 'Модификации ATS', url: 'https://drive.google.com/drive/folders/1P_QWEarpqaeZzOIECJgNG5s-1VYyViOg?usp=sharing', size: 'Google Диск' },
+  ]
+};
+
+// ---- LIVE API ----
+async function fetchServer(id) {
+  try {
+    const r = await fetch(`https://api.gamemonitoring.net/servers/${id}`);
+    const d = await r.json();
+    const s = d.response;
+    return { online: s.numplayers ?? 0, max: s.maxplayers ?? 0, map: s.map ?? '', version: s.version ?? '', status: s.status };
+  } catch { return null; }
+}
+
+async function loadServers() {
+  const list = document.getElementById('serverList');
+  // Показываем скелетон
+  list.innerHTML = serversConfig.map(s => s.divider
+    ? `<div class="srv-divider"><div class="srv-div-line"></div><span>American Truck Simulator</span><div class="srv-div-line"></div></div>`
+    : `<div class="server-card skeleton" id="srv-${s.id}">
+        <div class="server-icon">${s.icon}</div>
+        <div class="server-info">
+          <div class="server-name skel-line" style="width:260px;height:16px;border-radius:6px;background:var(--bg3)"></div>
+          <div class="skel-line" style="width:160px;height:12px;border-radius:4px;background:var(--bg3);margin-top:8px"></div>
+        </div>
+        <div class="server-actions"></div>
+        <div class="server-online"><div class="online-num empty">…</div><div class="online-label">онлайн</div></div>
+      </div>`
+  ).join('');
+
+  let total = 0;
+  const fetches = serversConfig.filter(s => !s.divider).map(async s => {
+    const data = await fetchServer(s.id);
+    const card = document.getElementById(`srv-${s.id}`);
+    if (!card) return;
+
+    const online = data ? data.online : 0;
+    const max    = data ? data.max    : 0;
+    const map    = data ? (data.map === 'europe' ? 'Европа' : data.map === 'usa' ? 'США' : data.map) : '—';
+    const ver    = data ? data.version : '—';
+    total += online;
+
+    const isMod = s.type === 'mod';
+    const isNR  = s.type === 'norules';
+    const gameTag = s.game === 'ets' ? '<span class="tag tag-ets">ETS2</span>' : '<span class="tag tag-ats">ATS</span>';
+    const modTag  = isMod ? '<span class="tag tag-mod">MODS</span>' : '';
+    const nrTag   = isNR  ? '<span class="tag tag-nr">NO RULES</span>' : '';
+    const modBtn  = isMod ? `<button class="btn-mods" onclick="openModsModal('${s.game}')">📦 Загрузить модификации</button>` : '';
+    const statusDot = data && data.status ? '<span class="status-dot online-dot" title="Онлайн"></span>' : '<span class="status-dot offline-dot" title="Недоступен"></span>';
+
+    card.classList.remove('skeleton');
+    if (isMod) card.classList.add('mod-server');
+    card.innerHTML = `
+      <div class="server-icon">${s.icon}</div>
+      <div class="server-info">
+        <div class="server-name">${statusDot}${s.name} ${gameTag}${modTag}${nrTag}</div>
+        <div class="server-meta">${map}${ver ? ' · v' + ver : ''}</div>
+      </div>
+      <div class="server-actions">
+        ${modBtn}
+        <a class="btn-monitor" href="${s.monUrl}" target="_blank">📊 Монитор</a>
+      </div>
+      <div class="server-online">
+        <div class="online-num ${online > 0 ? 'has-players' : 'empty'}">${online}/${max}</div>
+        <div class="online-label">онлайн</div>
+      </div>`;
+  });
+
+  await Promise.all(fetches);
+
+  // Обновляем суммарный онлайн в героe
+  const totalEl = document.getElementById('totalPlayers');
+  if (totalEl) {
+    let realTotal = 0;
+    document.querySelectorAll('.online-num').forEach(el => {
+      const n = parseInt(el.textContent);
+      if (!isNaN(n)) realTotal += n;
+    });
+    totalEl.textContent = realTotal;
+  }
+}
+
+// ---- MODS MODAL ----
+function openModsModal(game) {
+  const links = modLinks[game] || [];
+  const items = links.map(l => l.url
+    ? `<a class="mod-link-item" href="${l.url}" target="_blank">
+        <div class="mod-link-icon">📥</div>
+        <div class="mod-link-info">
+          <div class="mod-link-title">${l.label}</div>
+          <div class="mod-link-sub">${l.size}</div>
+        </div>
+        <span class="mod-link-arrow">→</span>
+      </a>`
+    : `<div class="mod-link-item mod-link-soon">
+        <div class="mod-link-icon">🕐</div>
+        <div class="mod-link-info">
+          <div class="mod-link-title">${l.label}</div>
+          <div class="mod-link-sub">${l.size}</div>
+        </div>
+      </div>`
+  ).join('');
+
+  const gameLabel = game === 'ets' ? 'Euro Truck Simulator 2' : 'American Truck Simulator';
+  document.getElementById('modalTitle').textContent = `Модификации · ${gameLabel}`;
+  document.getElementById('modalLinks').innerHTML = items;
+  document.getElementById('modsModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModsModal() {
+  document.getElementById('modsModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Закрытие по клику на фон
+document.addEventListener('click', e => {
+  if (e.target.id === 'modsModal') closeModsModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModsModal();
+});
+
+// ---- RULES TABS ----
+function showRules(tab, btn) {
+  document.querySelectorAll('.rules-content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.rule-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('rules-' + tab).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ---- DLC PLACEHOLDER ----
+function dlcPlaceholder(e) {
+  e.preventDefault();
+  alert('📦 Ссылка на DLC будет добавлена. Файлы будут размещены на Google Диске.');
+}
+
+// ---- INIT ----
+loadServers();
+</script>
+<!-- MODS MODAL -->
+<div id="modsModal" class="modal-overlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title-wrap">
+        <span style="font-size:1.4rem">📦</span>
+        <h3 class="modal-title" id="modalTitle">Модификации</h3>
+      </div>
+      <button class="modal-close" onclick="closeModsModal()">✕</button>
+    </div>
+    <div class="modal-note">
+      Скопируйте файлы в папку <code style="background:var(--bg3);border:1px solid var(--border2);border-radius:4px;padding:1px 6px;font-size:0.82em;color:var(--accent2)">Мои документы / Euro Truck Simulator 2 / mod</code> и не активируйте вручную — при подключении к серверу игра сделает это сама.
+    </div>
+    <div id="modalLinks" class="modal-links"></div>
+  </div>
+</div>
+</body>
+</html>
