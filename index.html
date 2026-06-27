@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Перевозки без границ — ETS2 серверы 24/7</title>
-<meta name="description" content="Русский проект для Euro Truck Simulator 2. Серверы 24/7, дружное сообщество, моды и конвои.">
+<title>Русский ETS2 & ATS проект — Перевозки без границ</title>
+<meta name="description" content="Русский ETS2 & ATS проект — Перевозки без границ. Серверы, конвои, моды и дружное сообщество.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 <style>
@@ -144,18 +144,17 @@
   .server-card {
     background: var(--card); border: 1px solid var(--border);
     border-radius: var(--radius-lg); padding: 1.25rem 1.5rem;
-    display: grid; grid-template-columns: auto 1fr auto auto;
+    display: grid; grid-template-columns: 1fr auto auto;
     align-items: center; gap: 1rem;
     transition: border-color 0.2s, background 0.2s;
   }
   .server-card:hover { border-color: var(--border2); background: var(--card2); }
   .server-card.mod-server { border-left: 3px solid var(--accent); }
-  .server-icon {
-    width: 48px; height: 48px; border-radius: 10px;
-    background: var(--bg3);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.4rem; flex-shrink: 0;
-  }
+  .online-num.has-players  { color: var(--green); }
+  .online-num.online-half  { color: #e8a020; }
+  .online-num.online-full  { color: #e05252; }
+  .online-num.empty        { color: var(--text3); }
+  .game-id { font-size: 0.75rem; color: var(--text3); font-family: monospace; cursor: default; }
   .server-info { min-width: 0; }
   .server-name {
     font-weight: 600; font-size: 0.95rem; color: var(--text);
@@ -952,14 +951,15 @@
 <script>
 // ---- SERVER CONFIG с реальными API ID ----
 const serversConfig = [
-  { id: 11489923, name: 'Перевозки без границ #1',       game: 'ets', type: 'normal',  icon: '🚛', monUrl: 'https://gamemonitoring.net/euro-truck-simulator-2/servers/11489923' },
-  { id: 11491750, name: 'Перевозки без границ #2',       game: 'ets', type: 'normal',  icon: '🚛', monUrl: 'https://gamemonitoring.net/euro-truck-simulator-2/servers/11491750' },
-  { id: 11384788, name: 'Перевозки без границ #3',       game: 'ets', type: 'normal',  icon: '🚛', monUrl: 'https://gamemonitoring.net/euro-truck-simulator-2/servers/11384788' },
-  { id: 11491753, name: 'Перевозки без границ #NO-RULES',game: 'ets', type: 'norules', icon: '🔴', monUrl: 'https://gamemonitoring.net/euro-truck-simulator-2/servers/11491753' },
-  { id: 11489035, name: 'Перевозки без границ #MODS',    game: 'ets', type: 'mod',     icon: '🚛', monUrl: 'https://gamemonitoring.net/euro-truck-simulator-2/servers/11489035' },
+  { divider: 'ets' },
+  { id: 11489923, gameId: '85568392936228069', name: 'Перевозки без границ #1',        game: 'ets', type: 'normal',  monUrl: 'https://gamemonitoring.net/euro-truck-simulator-2/servers/11489923' },
+  { id: 11491750, gameId: '85568392936241946', name: 'Перевозки без границ #2',        game: 'ets', type: 'normal',  monUrl: 'https://gamemonitoring.net/euro-truck-simulator-2/servers/11491750' },
+  { id: 11384788, gameId: '85568392935821147', name: 'Перевозки без границ #3',        game: 'ets', type: 'normal',  monUrl: 'https://gamemonitoring.net/euro-truck-simulator-2/servers/11384788' },
+  { id: 11491753, gameId: '85568392936241944', name: 'Перевозки без границ #NO-RULES', game: 'ets', type: 'norules', monUrl: 'https://gamemonitoring.net/euro-truck-simulator-2/servers/11491753' },
+  { id: 11489035, gameId: '85568392936193954', name: 'Перевозки без границ #MODS',     game: 'ets', type: 'mod',     monUrl: 'https://gamemonitoring.net/euro-truck-simulator-2/servers/11489035' },
   { divider: 'ats' },
-  { id: 11778762, name: 'Перевозки без границ #1',       game: 'ats', type: 'normal',  icon: '🚚', monUrl: 'https://gamemonitoring.net/american-truck-simulator/servers/11778762' },
-  { id: 11492529, name: 'Перевозки без границ #MODS',    game: 'ats', type: 'mod',     icon: '🚚', monUrl: 'https://gamemonitoring.net/american-truck-simulator/servers/11492529' },
+  { id: 11778762, gameId: '85568392936394460', name: 'Перевозки без границ #1',        game: 'ats', type: 'normal',  monUrl: 'https://gamemonitoring.net/american-truck-simulator/servers/11778762' },
+  { id: 11492529, gameId: '85568392936276377', name: 'Перевозки без границ #MODS',     game: 'ats', type: 'mod',     monUrl: 'https://gamemonitoring.net/american-truck-simulator/servers/11492529' },
 ];
 
 // Моды по типу сервера
@@ -987,9 +987,10 @@ async function loadServers() {
   const list = document.getElementById('serverList');
   // Показываем скелетон
   list.innerHTML = serversConfig.map(s => s.divider
-    ? `<div class="srv-divider"><div class="srv-div-line"></div><span>American Truck Simulator</span><div class="srv-div-line"></div></div>`
+    ? s.divider === 'ets'
+      ? `<div class="srv-divider"><div class="srv-div-line"></div><span>Euro Truck Simulator 2</span><div class="srv-div-line"></div></div>`
+      : `<div class="srv-divider"><div class="srv-div-line"></div><span>American Truck Simulator</span><div class="srv-div-line"></div></div>`
     : `<div class="server-card skeleton" id="srv-${s.id}">
-        <div class="server-icon">${s.icon}</div>
         <div class="server-info">
           <div class="server-name skel-line" style="width:260px;height:16px;border-radius:6px;background:var(--bg3)"></div>
           <div class="skel-line" style="width:160px;height:12px;border-radius:4px;background:var(--bg3);margin-top:8px"></div>
@@ -1013,26 +1014,32 @@ async function loadServers() {
 
     const isMod = s.type === 'mod';
     const isNR  = s.type === 'norules';
-    const gameTag = s.game === 'ets' ? '<span class="tag tag-ets">ETS2</span>' : '<span class="tag tag-ats">ATS</span>';
-    const modTag  = isMod ? '<span class="tag tag-mod">MODS</span>' : '';
-    const nrTag   = isNR  ? '<span class="tag tag-nr">NO RULES</span>' : '';
     const modBtn  = isMod ? `<button class="btn-mods" onclick="openModsModal('${s.game}')">📦 Загрузить модификации</button>` : '';
     const statusDot = data && data.status ? '<span class="status-dot online-dot" title="Онлайн"></span>' : '<span class="status-dot offline-dot" title="Недоступен"></span>';
+
+    // Цвет онлайна: зелёный < 50%, жёлтый >= 50%, красный = полный
+    let onlineClass = 'empty';
+    if (max > 0) {
+      const ratio = online / max;
+      if (online === 0)       onlineClass = 'empty';
+      else if (online >= max) onlineClass = 'online-full';
+      else if (ratio >= 0.5)  onlineClass = 'online-half';
+      else                    onlineClass = 'has-players';
+    }
 
     card.classList.remove('skeleton');
     if (isMod) card.classList.add('mod-server');
     card.innerHTML = `
-      <div class="server-icon">${s.icon}</div>
       <div class="server-info">
-        <div class="server-name">${statusDot}${s.name} ${gameTag}${modTag}${nrTag}</div>
-        <div class="server-meta">${map}${ver ? ' · v' + ver : ''}</div>
+        <div class="server-name">${statusDot}${s.name}</div>
+        <div class="server-meta">${map}${ver ? ' · v' + ver : ''}${s.gameId ? ' · <span class="game-id" title="ID для поиска в игре">ID: ' + s.gameId + '</span>' : ''}</div>
       </div>
       <div class="server-actions">
         ${modBtn}
-        <a class="btn-monitor" href="${s.monUrl}" target="_blank">📊 Монитор</a>
+        <a class="btn-monitor" href="${s.monUrl}" target="_blank">📊 Статистика</a>
       </div>
       <div class="server-online">
-        <div class="online-num ${online > 0 ? 'has-players' : 'empty'}">${online}/${max}</div>
+        <div class="online-num ${onlineClass}">${online}/${max}</div>
         <div class="online-label">онлайн</div>
       </div>`;
   });
