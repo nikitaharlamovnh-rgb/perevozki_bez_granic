@@ -787,7 +787,7 @@
     <div class="section-header">
       <div class="section-label">Дополнения</div>
       <h2>Скачать DLC</h2>
-      <p>Все дополнения для игры — в одном месте. Файлы размещены на Google Диске.</p>
+      <p>Все дополнения для игры — в одном месте.</p>
     </div>
     <div style="display:flex;gap:1.25rem;flex-wrap:wrap;">
       <a class="dlc-big-btn" href="https://drive.google.com/drive/folders/1tTaAhmR5WWcFN3Tl8QRFnOSiubaDqBPY?usp=sharing" target="_blank">
@@ -928,7 +928,7 @@
   <div class="footer-inner">
     <div class="footer-brand">
       <a class="logo" href="#">🚛 <span>ПЕРЕВОЗКИ БЕЗ ГРАНИЦ</span></a>
-      <p style="margin-top:0.75rem">Русский ETS2 & ATS проект. Дружное сообщество, конвои и моды.</p>
+      <p style="margin-top:0.75rem">Русский ETS2 & ATS проект. Дружное сообщество, конвои с модификациями и без.</p>
       <p style="margin-top:0.5rem;font-size:0.8rem;color:var(--text3)">Поддержать проект: <a href="https://www.donationalerts.com/r/nikplay4411" style="color:var(--accent);text-decoration:none" target="_blank">DonationAlerts</a></p>
     </div>
     <div class="footer-social">
@@ -964,13 +964,8 @@ const serversConfig = [
 
 // Моды по типу сервера
 const modLinks = {
-  ets: [
-    { label: 'Модификации ETS2 — Папка 1', url: 'https://drive.google.com/drive/folders/1zfS-txaC_u5GHp-HEcucSjD-OgVEBU5i?usp=sharing', size: 'Google Диск' },
-    { label: 'Модификации ETS2 — Папка 2', url: 'https://drive.google.com/drive/folders/1QVlrH7yz2WoP9R5J9yEn2QG6fh1tzu0P?usp=sharing', size: 'Google Диск' },
-  ],
-  ats: [
-    { label: 'Модификации ATS', url: 'https://drive.google.com/drive/folders/1P_QWEarpqaeZzOIECJgNG5s-1VYyViOg?usp=sharing', size: 'Google Диск' },
-  ]
+  ets: 'https://drive.google.com/drive/folders/1zfS-txaC_u5GHp-HEcucSjD-OgVEBU5i?usp=sharing',
+  ats: 'https://drive.google.com/drive/folders/1P_QWEarpqaeZzOIECJgNG5s-1VYyViOg?usp=sharing',
 };
 
 // ---- LIVE API ----
@@ -1014,7 +1009,7 @@ async function loadServers() {
 
     const isMod = s.type === 'mod';
     const isNR  = s.type === 'norules';
-    const modBtn  = isMod ? `<button class="btn-mods" onclick="openModsModal('${s.game}')">📦 Загрузить модификации</button>` : '';
+    const modBtn  = isMod ? `<a class="btn-mods" href="${modLinks[s.game]}" target="_blank">📦 Загрузить модификации</a>` : '';
     const statusDot = data && data.status ? '<span class="status-dot online-dot" title="Онлайн"></span>' : '<span class="status-dot offline-dot" title="Недоступен"></span>';
 
     // Цвет онлайна: зелёный < 50%, жёлтый >= 50%, красный = полный
@@ -1058,47 +1053,6 @@ async function loadServers() {
   }
 }
 
-// ---- MODS MODAL ----
-function openModsModal(game) {
-  const links = modLinks[game] || [];
-  const items = links.map(l => l.url
-    ? `<a class="mod-link-item" href="${l.url}" target="_blank">
-        <div class="mod-link-icon">📥</div>
-        <div class="mod-link-info">
-          <div class="mod-link-title">${l.label}</div>
-          <div class="mod-link-sub">${l.size}</div>
-        </div>
-        <span class="mod-link-arrow">→</span>
-      </a>`
-    : `<div class="mod-link-item mod-link-soon">
-        <div class="mod-link-icon">🕐</div>
-        <div class="mod-link-info">
-          <div class="mod-link-title">${l.label}</div>
-          <div class="mod-link-sub">${l.size}</div>
-        </div>
-      </div>`
-  ).join('');
-
-  const gameLabel = game === 'ets' ? 'Euro Truck Simulator 2' : 'American Truck Simulator';
-  document.getElementById('modalTitle').textContent = `Модификации · ${gameLabel}`;
-  document.getElementById('modalLinks').innerHTML = items;
-  document.getElementById('modsModal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeModsModal() {
-  document.getElementById('modsModal').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-// Закрытие по клику на фон
-document.addEventListener('click', e => {
-  if (e.target.id === 'modsModal') closeModsModal();
-});
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModsModal();
-});
-
 // ---- RULES TABS ----
 function showRules(tab, btn) {
   document.querySelectorAll('.rules-content').forEach(c => c.classList.remove('active'));
@@ -1116,21 +1070,5 @@ function dlcPlaceholder(e) {
 // ---- INIT ----
 loadServers();
 </script>
-<!-- MODS MODAL -->
-<div id="modsModal" class="modal-overlay">
-  <div class="modal-box">
-    <div class="modal-header">
-      <div class="modal-title-wrap">
-        <span style="font-size:1.4rem">📦</span>
-        <h3 class="modal-title" id="modalTitle">Модификации</h3>
-      </div>
-      <button class="modal-close" onclick="closeModsModal()">✕</button>
-    </div>
-    <div class="modal-note">
-      Скопируйте файлы в папку <code style="background:var(--bg3);border:1px solid var(--border2);border-radius:4px;padding:1px 6px;font-size:0.82em;color:var(--accent2)">Мои документы / Euro Truck Simulator 2 / mod</code> и не активируйте вручную — при подключении к серверу игра сделает это сама.
-    </div>
-    <div id="modalLinks" class="modal-links"></div>
-  </div>
-</div>
 </body>
 </html>
